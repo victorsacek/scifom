@@ -141,7 +141,7 @@ void malha()
 	for (i=0;i<n;i++){
 		fscanf(f_pontos, "%lf %lf",&xy[i][0],&xy[i][1]);
 		if (xy[i][0]!=minx){///////////// em i=0, topo nao muda
-			cond_topo_modif[i]=1; 
+		cond_topo_modif[i]=1; 
 		}
 	}
 	

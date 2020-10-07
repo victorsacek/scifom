@@ -34,6 +34,8 @@ extern double uplift_scale2;
 
 extern double tempo;
 
+extern double tempo_max;
+
 extern double *uplift_map;
 
 void orog()
@@ -42,28 +44,37 @@ void orog()
     long i;
 
     double dh;
-
+    float uplift_scale_real;
     for (i=0;i<nodes;i++){
 
-		if (tempo<=time_ofchangeu){
-            dh = uplift_scale*dt*uplift_map[i]/1.0E6;
+        if (time_ofchangeu != 0){
+            if (tempo<=time_ofchangeu){
+                dh = uplift_scale*dt*uplift_map[i]/1.0E6;
+
+                h_topo[i]+=dh;
+                h_bed[i]+=dh;
+
+                h_q[i]+=-dh*RHOC;
+                //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale);}
+            }else{
+                dh = uplift_scale2*dt*uplift_map[i]/1.0E6;
+
+                h_topo[i]+=dh;
+                h_bed[i]+=dh;
+
+                h_q[i]+=-dh*RHOC;
+                //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale2);}
+            }
+        }else{
+            uplift_scale_real=((uplift_scale2 - uplift_scale)*tempo/tempo_max) + uplift_scale;
+            dh = uplift_scale_real*dt*uplift_map[i]/1.0E6;
 
             h_topo[i]+=dh;
             h_bed[i]+=dh;
 
             h_q[i]+=-dh*RHOC;
-            //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale);}
-		}else{
-            dh = uplift_scale2*dt*uplift_map[i]/1.0E6;
-
-            h_topo[i]+=dh;
-            h_bed[i]+=dh;
-
-            h_q[i]+=-dh*RHOC;
-            //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale2);}
-		}
-	}
-
+        }
+    }
 
 
 }

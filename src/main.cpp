@@ -31,7 +31,12 @@ void malha_regular(double minx,double maxx,double miny,double maxy,long Nx, long
 
 void aloca_difusao();
 void aloca_topo();
+
+void aloca_topo_din();
+void topo_din();
+
 void aloca_fluvi();
+void aloca_uplift();
 
 void print_topo(double tempo,long muda_ponto);
 
@@ -104,7 +109,7 @@ void vR_calc();
 
 int main()
 {
-    double tempo_max=80.11E6;
+
     long i,j;
     double soma_h;
 
@@ -121,24 +126,34 @@ int main()
 
 
 	fscanf(entra_var, "%lf",&axis_stream);
-	fscanf(entra_var, "%lf",&TeConstante);
-	TeConstante2=TeConstante;
+	fscanf(entra_var, "%lf",&Terigida);
+	fscanf(entra_var, "%lf",&Teoffshore);
+	//TeConstante2=TeConstante;
 	//fscanf(entra_var, "%lf",&Telitho);
-	Telitho = TeConstante;
+	//Telitho = TeConstante;
 
 	fscanf(entra_var,"%lf",&vR);
+	fscanf(entra_var,"%lf",&time_ofchangevR);
+	fscanf(entra_var,"%lf",&vR2);
+
+	fscanf(entra_var,"%lf",&vRandes);
+	fscanf(entra_var,"%lf",&time_ofchangevRandes);
+	fscanf(entra_var,"%lf",&vR2andes);
+
 	fscanf(entra_var, "%lf",&Kf);
 	K_d = 0.0;
 	fscanf(entra_var, "%lf",&K_m);
 
 	fscanf(entra_var, "%lf",&ls);
 	fscanf(entra_var, "%lf",&lb);
+	fscanf(entra_var, "%lf",&lb2);
 
 	fscanf(entra_var, "%lf",&uplift_scale);
 
     fscanf(entra_var, "%lf",&time_ofchangeu);
     fscanf(entra_var, "%lf",&uplift_scale2);
-
+    fscanf(entra_var, "%lf",&tempo_max);
+    fscanf(entra_var, "%lf",&dt);
 
 	aloca_falhas();
 
@@ -163,7 +178,10 @@ int main()
     aloca_falhas();
     aloca_difusao();
     aloca_fluvi();
-
+	aloca_topo_din();
+	printf("aloca topo_din ok\n");
+    aloca_uplift();
+	printf("aloca uplift ok\n");
 	vR_sort();
 
 
@@ -212,7 +230,6 @@ int main()
 
 	vR_calc();
 
-
     for (tempo=dt;tempo<tempo_max;tempo+=dt){
 
 		if (cont_falha<num_falha){
@@ -228,6 +245,7 @@ int main()
 
 
         orog();			//printf("orog ok\n");
+		topo_din();
 
         //monta_falha();
 
@@ -259,7 +277,7 @@ int main()
 		fault3D();
 
 		print_topo(tempo,0);
-
+        /*
 		if (long(tempo)%1000000==0){
 			sprintf(nome,"perfil_FMHE_%.2fMa.txt",tempo/1E6); //topografia
 			f_perfil = fopen(nome,"w");
@@ -269,9 +287,9 @@ int main()
 			}
 			fclose(f_perfil);
 		}
+		*/
 
     }
-
     (void) time(&t2);
     printf("\nTempo: %ld",t2-t1);
     free_all();

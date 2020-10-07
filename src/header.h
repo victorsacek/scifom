@@ -8,6 +8,8 @@ double Edge;
 long n_lat;//=81;
 long n_latx;//=101;
 
+double tempo_max;//=50.1E6;
+
 long *side;
 
 double *moho_flex;
@@ -32,13 +34,28 @@ double **dist_vor;
 double *h_topo;
 double *h_bed;
 double *h_flex_cumulat;
+double *h_topo_din_cumulat;
 double *hu_flex_cumulat;
 double *water;
 
 double *h_topo_prov;
+// variaveis adicionadas para uplift variavel
 
-double *uplift_map;
+double **uplift_map;
+double *tempos_uplift_min;
+double *tempos_uplift_max;
+long numero_uplift;
+double *uplift_factor;
 
+// variaveis adicionadas para a topografia dinamica
+double **topo_din_map;
+double *tempo_topo_din;
+long numero_intervalos;
+double fac_topo_din;
+//tempo que representa o inicio da simulação (Ma)
+double tempo_inicial;
+
+//
 double *Lf_vec;
 
 long *lagos;
@@ -87,6 +104,15 @@ double *Qr_prov;
 double *Qf;
 
 double vR;//=1;
+double time_ofchangevR;
+double vR2;
+
+double vRandes;//=1;
+double time_ofchangevRandes;
+double vR2andes;
+
+double Terigida;
+double Teoffshore;
 
 double *vR_aux;
 long *vR_ordem;
@@ -101,11 +127,13 @@ double K_d;// = 0.3; /////alterado
 double K_m;// = 200.0;
 double Kf;// = 0.03;
 double ls;// = 10000.0; ////alterado
-double lb;// = 100000.0; ////alterado
-double nivel;
 
-double dt = 400.0;
-long n_sub_dt = 1000;
+double lb;// = 100000.0; ////alterado
+double lb2;
+
+double nivel;
+double dt;
+long n_sub_dt = 10000;
 
 double tempo;
 
@@ -153,7 +181,10 @@ long **Kconec;
 long *Kposconec;
 
 double **Ke;
+
 double *Te;
+double *Te_map;
+
 double *props;
 double *Kdiag;
 double *Kdiag_c;

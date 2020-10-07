@@ -96,39 +96,43 @@ extern double **xyz_thermal;
 extern double *T_vec_fut;
 
 extern double alpha_exp_thermo;
-
-extern double *uplift_map;
+/*
+extern double *Te;
+extern long tri_flex;
+*/
+extern double *Te_map;
 
 void aloca_topo()
 {
 	long i,j;
 	//double dist2,dist_max=40000;
-
+    double aux;
 	h_topo = Aloc_vector_real (nodes_max_aloca);
 	h_crust_sup = Aloc_vector_real (nodes_max_aloca);
 
-	uplift_map = Aloc_vector_real (nodes_max_aloca);
+	Te_map = Aloc_vector_real (nodes_max_aloca);
+	//Te = Aloc_vector_real (tri_flex);
 
-	h_bed = Aloc_vector_real (nodes_max_aloca);    
+	h_bed = Aloc_vector_real (nodes_max_aloca);
 	h_flex_cumulat = Aloc_vector_real (nodes_max_aloca);
 	hu_flex_cumulat = Aloc_vector_real (nodes_max_aloca);
-	h_q = Aloc_vector_real (nodes_max_aloca);        
+	h_q = Aloc_vector_real (nodes_max_aloca);
 	h_q_a = Aloc_vector_real (nodes_max_aloca);
-	h_w = Aloc_vector_real (nodes_max_aloca);    
-	h_u = Aloc_vector_real (nodes_max_aloca);    
+	h_w = Aloc_vector_real (nodes_max_aloca);
+	h_u = Aloc_vector_real (nodes_max_aloca);
 	moho = Aloc_vector_real (nodes_max_aloca);
 	load_Temper = Aloc_vector_real (nodes_max_aloca);
 
-	water = Aloc_vector_real (nodes_max_aloca);   
+	water = Aloc_vector_real (nodes_max_aloca);
 
-	h_temper35 = Aloc_vector_real (nodes_max_aloca);   
+	h_temper35 = Aloc_vector_real (nodes_max_aloca);
 
 	h_foot = Aloc_vector_real (nodes_max_aloca);
 
 	Lf_vec = Aloc_vector_real(nodes_max_aloca);
 
 
-	moho_aux = Aloc_vector_real (nodes_max_aloca);   
+	moho_aux = Aloc_vector_real (nodes_max_aloca);
 
 	side = Aloc_vector_long(nodes_max_aloca);
 
@@ -138,17 +142,17 @@ void aloca_topo()
 	//double fundo=-7000.0;
 
 	mar = Aloc_vector_long(nodes_max_aloca);
-	
-	
 
-	  
+
+
+
 	f_h_topo = fopen("topo_historia.txt","w");
-	f_h_sed = fopen("sed_historia.txt","w");	
+	f_h_sed = fopen("sed_historia.txt","w");
 
-	
+
 	/*double xh[20][2];
 	long cont_xh=7;
-	
+
 	xh[0][0] =-200000.0+50000.0; xh[0][1]=0.0;
 	xh[1][0] = 100000.0+50000.0; xh[1][1]=1.0;
 	xh[2][0] = 110000.0+50000.0; xh[2][1]=1500.0;
@@ -158,14 +162,14 @@ void aloca_topo()
 	xh[6][0] = 1000000.0+50000.0; xh[6][1]=0.0;*/
 
 	FILE *f_topo;
-	
+
 	f_topo = fopen("topo_moho_lito_up.txt","r");
-	
-     
+
+
 	for (i=0;i<nodes;i++){
-         
+
 		//h_topo[i]=1000.0;
-		 
+
 		/*if (xy[i][0]<=xh[0][0])
 			h_topo[i]=xh[0][1];
 
@@ -178,16 +182,16 @@ void aloca_topo()
 				h_topo[i]+= xh[j+1][1]*(xy[i][0]-xh[j][0])/(xh[j+1][0]-xh[j][0]);
 			}
 		}*/
-		 
-		fscanf(f_topo,"%lf %lf %lf %lf",&h_topo[i],&moho[i],&Lf_vec[i],&uplift_map[i]);
-			 
+
+		fscanf(f_topo,"%lf %lf %lf %lf %lf",&h_topo[i],&moho[i],&Lf_vec[i],&aux,&Te_map[i]);
+
 		h_bed[i]=h_topo[i];
-		
+
 		if (h_topo[i]<nivel){
 			mar[i]=1;
 		}
-		
-		
+
+
 		//if (h_topo[i]>200.0) Lf_vec[i]=4000000.0;
 
 
@@ -198,15 +202,15 @@ void aloca_topo()
 
 		if (h_topo[i]<nivel) water[i]=nivel-h_topo[i];
 	}
-	
+
 	fclose(f_topo);
-	
+
 	double dist;
 	double dx;
 	double dy;
-	
+
 	for (i=0;i<nodes_flex;i++){
-		
+
 		dist=1E11;
 		for (j=0;j<nodes;j++){
 			dx = xy[j][0]-xy_flex[i][0];
@@ -217,23 +221,23 @@ void aloca_topo()
 			}
 		}
 	}
-	
+
 	/*for (i=0;i<nodes;i++){
 		h_w[i] =peso[i][0]*moho_flex[peso_pos[i][0]];
 		h_w[i]+=peso[i][1]*moho_flex[peso_pos[i][1]];
 		h_w[i]+=peso[i][2]*moho_flex[peso_pos[i][2]];
-		
+
 		moho[i]=h_w[i];
 	}*/
-	
+
 	double h_aux;
 	double T_aux;
 	double z;
-	
+
 	for (i=0;i<nodes_flex;i++){
 		temper_q_a[i]=0.0;
 	}
-	
+
 	for (j=0;j<layers-1;j++){
 		for (i=0;i<nodes_flex;i++){
 			h_aux = xyz_thermal[j*nodes_flex+i][2]-xyz_thermal[(j+1)*nodes_flex+i][2];
@@ -241,16 +245,16 @@ void aloca_topo()
 			temper_q_a[i]+=h_aux*RHOM*(1.0-alpha_exp_thermo*T_aux);
 		}
 	}
-	
+
 	for (i=0;i<nodes;i++){
 		z =peso[i][0]*temper_q_a[peso_pos[i][0]];
 		z+=peso[i][1]*temper_q_a[peso_pos[i][1]];
 		z+=peso[i][2]*temper_q_a[peso_pos[i][2]];
-		 
+
 		load_Temper[i]=z;
 	}
-	
-     
-     
-     
+
+
+
+
 }

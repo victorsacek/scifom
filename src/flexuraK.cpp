@@ -13,13 +13,19 @@ extern long tri_flex;
 extern long **Tri_flex;
 extern long nodes_flex;
 extern double **xy_flex;
+extern double **xy;
+
+extern long nodes;
 
 extern double **Kflex;
 extern double **Kflex_c;
 extern long **Kconec;
 extern long *Kposconec;
 extern double **Ke;
+
 extern double *Te;
+extern double *Te_map;
+
 extern double *props;
 extern double *Kdiag;
 extern double *Kdiag_c;
@@ -27,7 +33,7 @@ extern double *Kdiag_c;
 extern double TeConstante;
 extern double TeConstante2;
 
-extern double Telitho;
+//extern double Telitho;
 
 extern double maxy;
 extern double miny;
@@ -40,107 +46,140 @@ void flexuraK()
 {
     long t,ii,jj,c1,c2,iaux;
     //double media_Ke;
-	
-	
+    double dist, aux;
+    double x,y;
+    long i;
+    /*
+	for (t=0;t<tri_flex;t++){
+
+        x = (xy_flex[Tri_flex[t][0]][0]+
+                 xy_flex[Tri_flex[t][1]][0]+
+                 xy_flex[Tri_flex[t][2]][0])/3;
+
+        y = (xy_flex[Tri_flex[t][0]][1]+
+             xy_flex[Tri_flex[t][1]][1]+
+             xy_flex[Tri_flex[t][2]][1])/3;
+
+        dist=10000000000;
+        for (i=0;i<nodes;i++){
+            aux = (xy[i][0]-x)*(xy[i][0]-x)+(xy[i][1]-y)*(xy[i][1]-y);
+            if (aux < dist){
+                dist=aux;
+                Te[t]=Te_map[i];
+            }
+        }
+
+	}
+
 	props[3]=RHOC;
 	for (t=0; t<tri_flex; t++){
-		montaKe(Ke,Tri_flex,xy_flex,props,Te,t);		
+		montaKe(Ke,Tri_flex,xy_flex,props,Te,t);
 		for (ii=0;ii<NODE_POR_ELE;ii++){
 			for (jj=0;jj<NODE_POR_ELE;jj++){
 				for (c1=0;c1<GLNODE;c1++){
                     for (c2=0;c2<GLNODE;c2++){
                         if (ii==jj && c1==c2){
                             Kdiag_c[Tri_flex[t][ii]*3+c1]+=Ke[ii*GLNODE + c1 ][jj*GLNODE + c2];
-                        }   
+                        }
                         else {
                             for (iaux=0;iaux<Kposconec[Tri_flex[t][ii]];iaux++){
                                 if (Kconec[Tri_flex[t][ii]][iaux]==Tri_flex[t][jj]){
                                     Kflex_c[Tri_flex[t][ii]*3+c1][iaux*3+c2]+=Ke[ii*GLNODE + c1 ][jj*GLNODE + c2];
                                 }
                             }
-                        }                     
+                        }
                     }
                 }
 			}
 		}
 	}
-	
+
 	props[3]=RHOM;
-	
-	double x,y;
-	
+
+
+    */
 	//TeConstante = Telitho;
 	//TeConstante2 = Telitho;
-	
+
 	//double dx,dy;
-	
+
 	//double xa,ya;
-	
+
 	double xxn;
-	
+
 	//double ddx,ddy;
-	
+
 	//double escala_z;
-	
+
 	//double dist;
-	
-	
+
+
 	//double media_x = (maxx+minx)/2.0;
 	//double ml_x = 0.7*(maxx-minx)/2.0;
-	
+
 	//double media_y = (maxy+miny)/2.0;
 	//double ml_y = 0.7*(maxy-miny)/2.0;
-	
+
 	//double xx1 = (minx+0.3*(maxx-minx));
 	//double yy2 = (miny+0.92*(maxy-miny));
-	
+
 	//double xx2 = (minx+0.5*(maxx-minx));
-	
+
 	//double yy3 = (miny+0.5*(maxy-miny));
-	
+
 	xxn = (minx+0.32*(maxx-minx));
-	
+
 	for (t=0;t<tri_flex;t++){
         /*if ((xy_flex[Tri_flex[t][0]][1]+
              xy_flex[Tri_flex[t][1]][1]+
              xy_flex[Tri_flex[t][2]][1])/3>(maxy+miny)/2)
 			Te[t]=TeConstante;
-        else 
+        else
 			Te[t]=TeConstante2;
-		
+
 		if ((xy_flex[Tri_flex[t][0]][1]+
 			xy_flex[Tri_flex[t][1]][1]+
 			xy_flex[Tri_flex[t][2]][1])/3<minx)
 			Te[t]=5000.0;*/
-		
+
 		/*if ((xy_flex[Tri_flex[t][0]][0]+
 			  xy_flex[Tri_flex[t][1]][0]+
 			  xy_flex[Tri_flex[t][2]][0])/3>=axis_stream)
 			Te[t]=Telitho;
-		
+
 		if ((xy_flex[Tri_flex[t][0]][0]+
 			 xy_flex[Tri_flex[t][1]][0]+
 			 xy_flex[Tri_flex[t][2]][0])/3<minx)
 			Te[t]=Telitho;*/
-		
+
 		x = (xy_flex[Tri_flex[t][0]][0]+
 			 xy_flex[Tri_flex[t][1]][0]+
 			 xy_flex[Tri_flex[t][2]][0])/3;
-		
+
 		y = (xy_flex[Tri_flex[t][0]][1]+
 			 xy_flex[Tri_flex[t][1]][1]+
 			 xy_flex[Tri_flex[t][2]][1])/3;
-		
+
+        dist=1000000000000;
+        for (i=0;i<nodes;i++){
+            aux = (xy[i][0]-x)*(xy[i][0]-x)+(xy[i][1]-y)*(xy[i][1]-y);
+            if (aux < dist){
+                dist=aux;
+                Te[t]=Te_map[i];
+            }
+		}
+
+
 		/*xa = x;
 		ya = y+200000.0;
-		
+
 		if (xa<xx1){
-			
+
 			ddx = xa - xx1;
 			ddy = ya - (miny+0.43*(maxy-miny));
-			
+
 			dist = sqrt(2.*ddx*ddx+ddy*ddy);
-			
+
 			if (dist<1300000.0)
 				Te[t]=70000.0;
 			else
@@ -160,30 +199,30 @@ void flexuraK()
 					Te[t]=10000.0;
 			}
 		}
-		
+
 		if (xa<xxn){
-			
+
 			ddx = xa - xxn;
 			ddy = ya - (miny+0.43*(maxy-miny));
-			
+
 			dist = sqrt(2.1*ddx*ddx+0.8*ddy*ddy);
-			
+
 			escala_z = exp(-pow((dist-1000000.0)/200000.0,2.0))*exp(-pow(ya/2100000.0,6.0));
-			
+
 			if (xa>(minx+0.28*(maxx-minx)))
 				escala_z=escala_z*pow((xxn-xa)/(xxn-(minx+0.28*(maxx-minx))),2.0);
-			
+
 			//if (escala_z>0.1){
 			if (dist-1000000.0>0 && Te[t]!=10000.0){
 				Te[t]=15000.0;
 			}
-		}*/
-		
-		Te[t]=Telitho;
-		
+		}
+
+		Te[t]=Telitho;*/
+
 
     }
-	
+
 	FILE *f_Te;
 	f_Te = fopen("TeLito.txt","w");
 	for (t=0;t<tri_flex;t++){
@@ -192,31 +231,31 @@ void flexuraK()
 								   xy_flex[Tri_flex[t][2]][0])/3,Te[t]);
 	}
 	fclose(f_Te);
-    
+
     for (t=0; t<tri_flex; t++){
-		montaKe(Ke,Tri_flex,xy_flex,props,Te,t);		
+		montaKe(Ke,Tri_flex,xy_flex,props,Te,t);
 		for (ii=0;ii<NODE_POR_ELE;ii++){
 			for (jj=0;jj<NODE_POR_ELE;jj++){
 				for (c1=0;c1<GLNODE;c1++){
                     for (c2=0;c2<GLNODE;c2++){
                         if (ii==jj && c1==c2){
                             Kdiag[Tri_flex[t][ii]*3+c1]+=Ke[ii*GLNODE + c1 ][jj*GLNODE + c2];
-                        }   
+                        }
                         else {
                             for (iaux=0;iaux<Kposconec[Tri_flex[t][ii]];iaux++){
                                 if (Kconec[Tri_flex[t][ii]][iaux]==Tri_flex[t][jj]){
                                     Kflex[Tri_flex[t][ii]*3+c1][iaux*3+c2]+=Ke[ii*GLNODE + c1 ][jj*GLNODE + c2];
                                 }
                             }
-                        }                     
+                        }
                     }
                 }
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }
 
 
@@ -234,7 +273,7 @@ void montaKe(double **Ke,long **eletopo,double **posnos, double *props, double *
 	delta=0.5*((xj*yk-yj*xk)+xi*(yj-yk)+yi*(xk-xj));
 	if (delta==0) { printf("Elemento colapsado: delta = 0\n"); exit(-1);}
 	if (delta<0) {
-        printf("QUE ESTRANHO!!!");         
+        printf("QUE ESTRANHO!!!");
 		delta=delta*(-1);
 		xaux=xi; xi=xk; xk=xaux;
 		yaux=yi; yi=yk; yk=yaux;
@@ -247,8 +286,8 @@ void montaKe(double **Ke,long **eletopo,double **posnos, double *props, double *
 	T = Te[contador];
 	rho   = props[3];
 	g     = props[4];
-	
-	
+
+
 	D=E*T*T*T/12/(1-v*v);
 
 	b1=yj-yk; c1=xk-xj;
@@ -735,4 +774,4 @@ void montaKe(double **Ke,long **eletopo,double **posnos, double *props, double *
 
 
 
- 
+
