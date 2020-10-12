@@ -6,7 +6,7 @@ Surface processes, Climate, Isostasy, Flexure, Orogeny and Mantle dynamics code
 
 * Clone the SCIFOM repository.
 
-* Compile the code in the `mandyoc/src/` directory:
+* Compile the code in the `scifom/src/` directory:
 
     ```
     make all
