@@ -65,6 +65,13 @@ extern double *vR_map;
 
 extern long *mar;
 
+extern double *lsr;
+extern double *depth_lsr;
+extern int nsr;
+extern double **h_sr;
+extern double *lsr_map;
+
+
 void fluvi_min()
 {
     long i,j,jj;
@@ -377,6 +384,13 @@ void fluvi_min()
 	
 	for (i=0;i<nodes;i++)
 		h_topo_prov[i]=h_topo[i];
+
+	for (i=0;i<nodes;i++){
+		lsr_map[i]=1.0;
+		for (int lit=0;lit<nsr;lit++){
+			if (h_topo[i]==h_sr[i][lit]) lsr_map[i]=lsr[lit];
+		}
+	}
 	
 	
 	for (cont=0;cont<n_sub_dt;cont++){
@@ -407,7 +421,7 @@ void fluvi_min()
 					}
 					else {
 						if (h_bed[i]<h_topo_prov[i])
-							lb=ls;
+							lb=ls*lsr_map[i];
 						else
 							lb=Lf_vec[i];
 						//if (h_topo_prov[i]>4500.0)

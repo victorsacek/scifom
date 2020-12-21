@@ -44,6 +44,10 @@ extern long **peso_pos;
 
 extern double *h_crust_sup;
 
+extern double *lsr;
+extern double *depth_lsr;
+extern int nsr;
+extern double **h_sr;
 
 void modif_topo()
 {
@@ -93,6 +97,11 @@ void modif_topo()
 			
 
         h_topo[i]+=aux_dh;
+
+		for (int lit=0; lit<nsr; lit++){
+			if (h_topo[i]-depth_lsr[lit] > h_sr[i][lit]) h_sr[i][lit] = h_topo[i]-depth_lsr[lit];
+			if (h_sr[i][lit]>h_topo[i]) h_sr[i][lit]=h_topo[i];
+		}
 
 		
         aux_bed=h_bed[i];

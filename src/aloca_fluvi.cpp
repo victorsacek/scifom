@@ -30,6 +30,16 @@ extern double *h_topo_prov;
 
 extern long *lagos;
 
+extern double *lsr;
+extern double *depth_lsr;
+extern int nsr;
+extern double **h_sr;
+extern double *lsr_map;
+
+extern long nodes;
+
+extern double *h_topo;
+
 void aloca_fluvi()
 {
      Df = Aloc_vector_real (nodes_max_aloca);
@@ -57,5 +67,29 @@ void aloca_fluvi()
 	
      h_min = Aloc_vector_real (nodes_max_aloca);
      pos_min = Aloc_vector_long (nodes_max_aloca);
+
+     FILE *f;
+     nsr=0;
+     f = fopen("lithification.txt","r");
+     if (f!=NULL){
+          fscanf(f,"%d",&nsr);
+          
+          printf("\n\nLithification on\n\n");
+          depth_lsr = Aloc_vector_real(nsr);
+          lsr = Aloc_vector_real(nsr);
+          lsr_map = Aloc_vector_real(nodes_max_aloca);
+          h_sr = Aloc_matrix_real(nodes_max_aloca,nsr);
+          for (int j=0;j<nodes;j++){
+               for (int i=0;i<nsr;i++){
+                    h_sr[j][i]=h_topo[j];
+               }
+          }
+          for (int i=0;i<nsr;i++){
+               fscanf(f,"%lf %lf",&lsr[i],&depth_lsr[i]);
+               printf("%lf %lf\n",lsr[i],depth_lsr[i]);
+          }
+          fclose(f);
+     }
+     else printf("\n\nLithification off\n\n");
      
 }

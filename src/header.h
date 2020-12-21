@@ -52,7 +52,7 @@ double **topo_din_map;
 double *tempo_topo_din;
 long numero_intervalos;
 double fac_topo_din;
-//tempo que representa o inicio da simulaÁ„o (Ma)
+//tempo que representa o inicio da simulaÔøΩÔøΩo (Ma)
 double tempo_inicial;
 
 //
@@ -130,6 +130,12 @@ double ls;// = 10000.0; ////alterado
 
 double lb;// = 100000.0; ////alterado
 double lb2;
+
+double *lsr;
+double *depth_lsr;
+int nsr;
+double **h_sr;
+double *lsr_map;
 
 double nivel;
 double dt;
@@ -317,7 +323,7 @@ double pos_falha;
 double pos_falha_ant=pos_falha;
 double inclina=0.5;
 
-double **falha_plot; //posição da falha em y = 0
+double **falha_plot; //posiÔøΩÔøΩo da falha em y = 0
 long **falha_plot_pos;
 
 double tgdip = 1;//1.73;//12.0/20.0;
