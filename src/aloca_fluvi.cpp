@@ -40,6 +40,8 @@ extern long nodes;
 
 extern double *h_topo;
 
+extern int lith_flag;
+
 void aloca_fluvi()
 {
      Df = Aloc_vector_real (nodes_max_aloca);
@@ -72,6 +74,7 @@ void aloca_fluvi()
      nsr=0;
      f = fopen("lithification.txt","r");
      if (f!=NULL){
+          lith_flag=1;
           fscanf(f,"%d",&nsr);
           
           printf("\n\nLithification on\n\n");
@@ -90,6 +93,10 @@ void aloca_fluvi()
           }
           fclose(f);
      }
-     else printf("\n\nLithification off\n\n");
+     else {
+          lith_flag=0;
+          printf("\n\nLithification off\n\n");
+          lsr_map = Aloc_vector_real(nodes_max_aloca);
+     }
      
 }

@@ -55,6 +55,8 @@ double fac_topo_din;
 //tempo que representa o inicio da simula��o (Ma)
 double tempo_inicial;
 
+int lith_flag;
+
 //
 double *Lf_vec;
 

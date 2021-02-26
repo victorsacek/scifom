@@ -71,6 +71,8 @@ extern int nsr;
 extern double **h_sr;
 extern double *lsr_map;
 
+extern int lith_flag;
+
 
 void fluvi_min()
 {
@@ -387,8 +389,12 @@ void fluvi_min()
 
 	for (i=0;i<nodes;i++){
 		lsr_map[i]=1.0;
-		for (int lit=0;lit<nsr;lit++){
-			if (h_topo[i]==h_sr[i][lit]) lsr_map[i]=lsr[lit];
+	}
+	if (lith_flag==1){
+		for (i=0;i<nodes;i++){
+			for (int lit=0;lit<nsr;lit++){
+				if (h_topo[i]==h_sr[i][lit]) lsr_map[i]=lsr[lit];
+			}
 		}
 	}
 	
