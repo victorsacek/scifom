@@ -113,6 +113,11 @@ double vRandes;//=1;
 double time_ofchangevRandes;
 double vR2andes;
 
+double **vR_maps;
+double *h_vR_external;
+int nvR_maps;
+int vR_external_flag;
+
 double Terigida;
 double Teoffshore;
 

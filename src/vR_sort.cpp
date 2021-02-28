@@ -42,6 +42,11 @@ extern long *pos_conec;
 
 extern double **aresta_vor;
 
+extern double **vR_maps;
+extern double *h_vR_external;
+extern int nvR_maps;
+extern int vR_external_flag;
+
 void sort(unsigned long n, double arr[], long *Ox);
 
 void vR_sort()
@@ -170,4 +175,34 @@ void sort(unsigned long n, double arr[], long *Ox)
 		}
 	}
 	free(istack);
+}
+
+void read_vR_external()
+{
+	FILE *f;
+	nvR_maps=0;
+	f = fopen("vR_external.txt","r");
+	if (f!=NULL){
+		vR_external_flag=1;
+		fscanf(f,"%d",&nvR_maps);
+		
+		printf("\n\nExternal vR on\n\n");
+		h_vR_external = Aloc_vector_real(nvR_maps);
+		vR_maps = Aloc_matrix_real(nvR_maps,nodes_max_aloca);
+		
+		for (int t=0;t<nvR_maps;t++){
+			fscanf(f,"%lf",&h_vR_external[t]);
+			printf("%lf\n",h_vR_external[t]);
+		}
+		for (int i=0; i<nodes; i++){
+			for (int t=0;t<nvR_maps;t++){
+				fscanf(f,"%lf",&vR_maps[t][i]);
+			}
+		}
+		fclose(f);
+	}
+	else {
+		vR_external_flag=0;
+		printf("\n\nExternal vR off\n\n");
+	}
 }

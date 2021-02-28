@@ -171,4 +171,47 @@ void vR_calc()
 	}
 }
 
+extern double **vR_maps;
+extern double *h_vR_external;
+extern int nvR_maps;
 
+
+void calc_vR_external()
+{
+	long i,t;
+	double h_max=0.0;
+	double fac;
+	for (i=0;i<nodes;i++){
+		if (uplift_map[i]==1){
+			if (h_max<h_topo[i]) h_max=h_topo[i];
+		}
+	}
+	if (h_max<h_vR_external[0]){
+		for (i=0;i<nodes;i++){
+			vR_map[i] = vR_maps[0][i];
+		}
+	}
+	for (t=1;t<nvR_maps;t++){
+		if (h_max>=h_vR_external[t-1] && h_max<h_vR_external[t]){
+			fac = (h_max-h_vR_external[t-1])/(h_vR_external[t]-h_vR_external[t-1]);
+			for (i=0;i<nodes;i++){
+				vR_map[i] = (1.0-fac)*vR_maps[t-1][i] + fac*vR_maps[t][i];
+			}
+		}
+	}
+	t = nvR_maps-1;
+	if (h_max>=h_vR_external[t]){
+		for (i=0;i<nodes;i++){
+			vR_map[i] = vR_maps[t][i];
+		}
+	}
+
+	for (i=0;i<nodes;i++){
+		vR_map[i] = vR_map[i]*area_vor[i];;
+	}
+	
+
+	//for (i=0;i<nodes;i++){
+	//	printf("%f ",vR_map[i]);
+	//}
+}

@@ -106,6 +106,8 @@ void orog();
 
 void vR_sort();
 void vR_calc();
+void calc_vR_external();
+void read_vR_external();
 
 int main()
 {
@@ -230,6 +232,9 @@ int main()
 
 	vR_calc();
 
+	read_vR_external();
+	if (vR_external_flag==1) calc_vR_external();
+
     for (tempo=dt;tempo<tempo_max;tempo+=dt){
 
 		if (cont_falha<num_falha){
@@ -250,7 +255,8 @@ int main()
         //monta_falha();
 
 		if (long(tempo)%20000==0){
-			vR_calc();
+			if (vR_external_flag==0) vR_calc();
+			if (vR_external_flag==1) calc_vR_external();
 		}
 
 
