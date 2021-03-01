@@ -2,7 +2,7 @@
 //  topo_din.cpp
 //  incorpora a topografia dinamica lida de um arquivo (topo_din_map.txt)
 //	para cada intervalo de tempo a topografia dinamica pode variar,
-//os intervals de tempo estao no arquivo param_topo_din.txt (a primeira linha é o numero de intvalos de tempo
+//os intervals de tempo estao no arquivo param_topo_din.txt (a primeira linha ï¿½ o numero de intvalos de tempo
 //  Created by LabTectonofisica on 30/04/18.
 //  Copyright (c) 2018 Lab TectonofÃ­sica. All rights reserved.
 //
@@ -30,6 +30,11 @@ extern double **topo_din_map;
 extern double *tempo_topo_din;
 extern long numero_intervalos;
 extern double tempo_inicial;
+
+
+extern int lith_flag;
+extern int nsr;
+extern double **h_sr;
 
 void topo_din()
 {
@@ -60,6 +65,10 @@ void topo_din()
         h_topo_din_cumulat[i]+=dh;
 		//h_q[i]+=-dh*RHOC; deve-se colocar a carga h[q]?
         //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale);}
-
+        if (lith_flag==1){
+            for (int l=0;l<nsr;l++){
+                h_sr[i][l]+=dh;
+            }
+        }
 	}
 }

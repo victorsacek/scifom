@@ -392,6 +392,12 @@ void fluvi_min()
 	}
 	if (lith_flag==1){
 		for (i=0;i<nodes;i++){
+			for (int lit=0; lit<nsr; lit++){
+				if (h_topo[i]-depth_lsr[lit] > h_sr[i][lit]) h_sr[i][lit] = h_topo[i]-depth_lsr[lit];
+				if (h_sr[i][lit]>h_topo[i]) h_sr[i][lit]=h_topo[i];
+			}
+		}
+		for (i=0;i<nodes;i++){
 			for (int lit=0;lit<nsr;lit++){
 				if (h_topo[i]==h_sr[i][lit]) lsr_map[i]=lsr[lit];
 			}

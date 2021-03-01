@@ -17,7 +17,7 @@ extern double *h_crust_sup;
 
 extern double *wflex_aux;
 
-extern double **falha_plot; //posição da falha em y = 0
+extern double **falha_plot; //posiï¿½ï¿½o da falha em y = 0
 extern long **falha_plot_pos;
 extern long num_falha;
 
@@ -40,6 +40,11 @@ extern double TeConstante2;
 
 extern double minx;
 extern double maxx;
+
+
+extern int lith_flag;
+extern int nsr;
+extern double **h_sr;
 
 void monta_h_w()
 {
@@ -84,8 +89,16 @@ void monta_h_w()
 		h_crust_sup[i]+=h_w[i];
         
         h_flex_cumulat[i]+=h_w[i];
-        
+
     }
+
+	if (lith_flag==1){
+		for (i=0;i<nodes;i++){
+			for (int l=0;l<nsr;l++){
+				h_sr[i][l]+=h_w[i];
+			}
+		}
+	}
     
     
     long aux;

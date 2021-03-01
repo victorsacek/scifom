@@ -35,6 +35,11 @@ extern double *uplift_factor;
 
 extern double tempo;
 
+
+extern int lith_flag;
+extern int nsr;
+extern double **h_sr;
+
 void orog()
 {
 
@@ -51,6 +56,13 @@ void orog()
         h_topo[j]+=dh;
         h_bed[j]+=dh;
         h_q[j]+=-dh*RHOC;
+
+        if (lith_flag==1){
+            for (int l=0;l<nsr;l++){
+                h_sr[j][l]+=dh;
+            }
+        }
+        
     }
         //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale);}
 
