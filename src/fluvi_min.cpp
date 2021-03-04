@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <sys/time.h>
 
 extern long **Tri;
 extern double **xy;
@@ -403,6 +404,11 @@ void fluvi_min()
 			}
 		}
 	}
+
+	for (i=0;i<nodes;i++){
+		lsr_map[i]*=ls;
+		Qr_prov[i]*=Kf/dist_fluvi[i];
+	}
 	
 	
 	for (cont=0;cont<n_sub_dt;cont++){
@@ -418,13 +424,19 @@ void fluvi_min()
 			
 			if (j!=i){
 				if (h_topo_prov[i]>h_topo_prov[j]){      
-					if (h_topo_prov[j]>nivel)
-						Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
-					else
-						Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-nivel)/dist_fluvi[i];
+					if (h_topo_prov[j]>nivel){
+						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j]);
+					}
+					else{
+						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-nivel)/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(h_topo_prov[i]-nivel);
+					}
 					
-					if (h_topo_prov[i]<nivel)
-						Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
+					if (h_topo_prov[i]<nivel){
+						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j]);
+					}
 						
 						
 					if (Qeqb<=Qf[i]){
@@ -433,7 +445,7 @@ void fluvi_min()
 					}
 					else {
 						if (h_bed[i]<h_topo_prov[i])
-							lb=ls*lsr_map[i];
+							lb=lsr_map[i];
 						else
 							lb=Lf_vec[i];
 						//if (h_topo_prov[i]>4500.0)
@@ -453,13 +465,19 @@ void fluvi_min()
 		}
 		
 		for (i=0;i<nodes;i++){
-			h_topo_prov[i]=h_topo_prov[i]+cond_topo_modif[i]*Df[i];
+			h_topo_prov[i]+=cond_topo_modif[i]*Df[i];
 		}
 	
 	}
 	
-	for (i=0;i<nodes;i++)
+	
+	for (i=0;i<nodes;i++){
 		Df[i]=h_topo_prov[i]-h_topo[i];
+	}
+
+	for (i=0;i<nodes;i++){
+		lsr_map[i]/=ls;
+	}
 	
                  
     

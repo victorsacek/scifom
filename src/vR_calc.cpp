@@ -182,7 +182,7 @@ void calc_vR_external()
 	double h_max=0.0;
 	double fac;
 	for (i=0;i<nodes;i++){
-		if (uplift_map[i]==1){
+		if (uplift_map[i]>0.0){
 			if (h_max<h_topo[i]) h_max=h_topo[i];
 		}
 	}

@@ -11,6 +11,7 @@
 #include <time.h>
 #include <math.h>
 #include "header.h"
+#include <sys/time.h>
 
 /*//Função que lê o arquivo de entrada e salva dados dos sismos lidos. Retorna o numero de sismos lidos.
 void IO (*nx, *ny){
@@ -163,8 +164,8 @@ int main()
 	fclose(entra_var);
 
 
-	char nome[80];
-	FILE *f_perfil;
+	//char nome[80];
+	//FILE *f_perfil;
 
 
     time_t t1,t2;
@@ -229,11 +230,14 @@ int main()
 
 	printf("monta_falha ok\n");
 
+	struct timeval start, stop;
+	double secs;
 
 	vR_calc();
 
 	read_vR_external();
 	if (vR_external_flag==1) calc_vR_external();
+	gettimeofday(&start, NULL);
 
     for (tempo=dt;tempo<tempo_max;tempo+=dt){
 
@@ -262,6 +266,10 @@ int main()
 
         if (long(tempo)%(2000)==0){
 
+			gettimeofday(&stop, NULL);
+			secs = (double)(stop.tv_usec - start.tv_usec) / 1000000 + (double)(stop.tv_sec - start.tv_sec);
+			printf("time taken %f\n",secs);
+
 			flexura_load();
 			flexura_solv(Kflex, Kdiag, bflex, wflex);
 
@@ -277,7 +285,7 @@ int main()
 				}
             }
             printf("Tempo: %f Minimo : %g %g \n",tempo,h_bed[j],h_topo[j]);
-
+			gettimeofday(&start, NULL);
         }
 
 		fault3D();

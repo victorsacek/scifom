@@ -1,4 +1,4 @@
-//Aloca espaço e le os parametros da tpografia dinamica
+//Aloca espaï¿½o e le os parametros da tpografia dinamica
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -17,7 +17,7 @@ extern long nodes_max_aloca;
 
 void aloca_uplift()
 {
-	int i,j,n2;
+	int i,j;
 
 
 	FILE *parametros_uplift;

@@ -40,7 +40,7 @@ void topo_din()
 {
 
     long i = 0;
-	long verif = 0;
+	//long verif = 0;
     double dh;
     double tempo_aux;
     double tempo_aux2;
