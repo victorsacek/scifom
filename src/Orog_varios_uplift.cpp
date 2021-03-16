@@ -53,6 +53,11 @@ void orog()
                     dh = dh + uplift_factor[i]*dt*uplift_map[j][i]/1.0E6;
             }
         }
+        if (h_topo[j]>6000.0){
+            dh *= 1.0 - (h_topo[j]-6000.0)/1000.0;
+            if (dh<0.0) dh=0;
+        }
+
         h_topo[j]+=dh;
         h_bed[j]+=dh;
         h_q[j]+=-dh*RHOC;

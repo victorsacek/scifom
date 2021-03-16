@@ -47,6 +47,11 @@ void orog()
     uplift_scale_real=((uplift_scale2 - uplift_scale)*tempo/tmax) + uplift_scale;
     for (i=0;i<nodes;i++){
         dh = uplift_scale_real*dt*uplift_map[i]/1.0E6;
+        if (h_topo[i]>6000.0){
+            dh *= 1.0 - (h_topo[i]-6000.0)/1000.0;
+            if (dh<0.0) dh=0;
+            printf("entrou aqui");
+        }
 
         h_topo[i]+=dh;
         h_bed[i]+=dh;

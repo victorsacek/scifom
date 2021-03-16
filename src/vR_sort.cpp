@@ -183,21 +183,27 @@ void read_vR_external()
 	nvR_maps=0;
 	f = fopen("vR_external.txt","r");
 	if (f!=NULL){
-		vR_external_flag=1;
+		
 		fscanf(f,"%d",&nvR_maps);
-		
-		printf("\n\nExternal vR on\n\n");
-		h_vR_external = Aloc_vector_real(nvR_maps);
-		vR_maps = Aloc_matrix_real(nvR_maps,nodes_max_aloca);
-		
-		for (int t=0;t<nvR_maps;t++){
-			fscanf(f,"%lf",&h_vR_external[t]);
-			printf("%lf\n",h_vR_external[t]);
-		}
-		for (int i=0; i<nodes; i++){
+		if (nvR_maps>0){
+			vR_external_flag=1;
+			printf("\n\nExternal vR on\n\n");
+			h_vR_external = Aloc_vector_real(nvR_maps);
+			vR_maps = Aloc_matrix_real(nvR_maps,nodes_max_aloca);
+			
 			for (int t=0;t<nvR_maps;t++){
-				fscanf(f,"%lf",&vR_maps[t][i]);
+				fscanf(f,"%lf",&h_vR_external[t]);
+				printf("%lf\n",h_vR_external[t]);
 			}
+			for (int i=0; i<nodes; i++){
+				for (int t=0;t<nvR_maps;t++){
+					fscanf(f,"%lf",&vR_maps[t][i]);
+				}
+			}
+		}
+		else {
+			vR_external_flag=-1;
+			fscanf(f,"%lf %lf",&windx,&windy);
 		}
 		fclose(f);
 	}

@@ -68,80 +68,7 @@ void vR_calc()
 		vR_map[i]=0.0;
 		vR_flow[i]=0.0;
 	}
-	/*
-
-	double vapour = 2.0E6; //m^2/yr
-	double l_oro = 100.0E3;
-	double h_oro = 1000.0;
-
-	long ii,j,jj;
-
-	double dist_aux;
-
-
-
-	for (i=0;i<nodes;i++){
-		if (h_topo[i]<nivel){
-			vR_flow[i]=vapour;
-		}
-		else {
-			if (xy[i][0]==maxx and windx<0.0) vR_flow[i]=vapour;
-			if (xy[i][0]==minx and windx>0.0) vR_flow[i]=vapour;
-			if (xy[i][1]==maxy and windy<0.0) vR_flow[i]=vapour;
-			if (xy[i][1]==miny and windy>0.0) vR_flow[i]=vapour;
-		}
-
-	}
-
-	double xxn;
-
-	xxn = (minx+0.32*(maxx-minx));
-
-
-
-	for (ii=nodes-1;ii>=0;ii--){
-		i=vR_ordem[ii];
-
-		if (h_topo[i]>nivel){
-			jj=i;
-
-
-			for (j=0;j<pos_conec[i];j++){
-				if (vR_aux[conec[i][j]]>vR_aux[jj]){
-					if (aresta_vor[i][j]>0){
-						jj = conec[i][j];
-						dist_aux = dist_vor[i][j];
-					}
-				}
-			}
-
-			if (vR_flow[i]==0.0 && jj!=i){
-				//if (xy[i][0]<(maxx-minx)/3.0){
-					vR_flow[i]=vR_flow[jj]-vR_map[jj]*dist_aux/area_vor[jj];
-					if (vR_flow[i]<0.0) vR_flow[i]=0.0;
-				//}
-				//else vR_flow[i]=vapour;
-
-			}
-
-
-			if (h_topo[i]>500 && xy[i][0]<xxn)
-				vR_map[i]=vR_flow[i]*(h_topo[i]-450.)*area_vor[i]/(l_oro*h_oro);
-			else
-				vR_map[i]=vR_flow[i]*(50.)*area_vor[i]/(l_oro*h_oro);
-
-
-			if (xy[i][0]>=xxn){
-				vR_map[i]=1.0*area_vor[i];
-				vR_flow[i]=vapour;
-			}
-
-
-
-			//printf("%ld %ld %ld vR_map: %lg | vR_flow: %lg\n",ii,i,jj,vR_map[i]/area_vor[i],vR_flow[i]);
-		}
-	}
-	*/
+	
     double vR_efetivo;
     double vR_efetivoandes;
 	for (i=0;i<nodes;i++){
@@ -170,6 +97,89 @@ void vR_calc()
 		}
 	}
 }
+
+void vR_calc_orography()
+{
+
+
+	double vapour = 2.0E6; //m^2/yr
+	double l_oro = 100.0E3;
+	double h_oro = 1000.0;
+
+	long i,ii,j,jj;
+
+	double dist_aux;
+
+
+
+	for (i=0;i<nodes;i++){
+		if (h_topo[i]<nivel){
+			vR_flow[i]=vapour;
+		}
+		else {
+			if (xy[i][0]==maxx and windx<0.0) vR_flow[i]=vapour;
+			if (xy[i][0]==minx and windx>0.0) vR_flow[i]=vapour;
+			if (xy[i][1]==maxy and windy<0.0) vR_flow[i]=vapour;
+			if (xy[i][1]==miny and windy>0.0) vR_flow[i]=vapour;
+		}
+
+	}
+
+	double xxn;
+
+	xxn = (minx+0.32*(maxx-minx));
+
+
+
+	for (ii=nodes-1;ii>=0;ii--){
+		i=vR_ordem[ii];
+
+		vR_map[i]=3.0*area_vor[i];//!!!
+
+		if (h_topo[i]>nivel){
+			jj=i;
+
+
+			for (j=0;j<pos_conec[i];j++){
+				if (vR_aux[conec[i][j]]>vR_aux[jj]){
+					if (aresta_vor[i][j]>0){
+						jj = conec[i][j];
+						dist_aux = dist_vor[i][j];
+					}
+				}
+			}
+
+			if (vR_flow[i]==0.0 && jj!=i){
+				//if (xy[i][0]<(maxx-minx)/3.0){
+					vR_flow[i]=vR_flow[jj]-vR_map[jj]*dist_aux/area_vor[jj];
+					if (vR_flow[i]<0.0) vR_flow[i]=0.0;
+				//}
+				//else vR_flow[i]=vapour;
+
+			}
+
+
+			//if (h_topo[i]>500 && xy[i][0]<xxn)
+			if (xy[i][0]<xxn){
+				if (h_topo[i]>500 && uplift_map[i]>0)
+					vR_map[i]=vR_flow[i]*(h_topo[i]-450.)*area_vor[i]/(l_oro*h_oro);
+				else
+					vR_map[i]=vR_flow[i]*(50.)*area_vor[i]/(l_oro*h_oro);
+			}
+			else{
+				vR_map[i]=1.0*area_vor[i];
+				vR_flow[i]=vapour;
+			}
+
+			vR_map[i]=1.0*area_vor[i];//!!!
+
+			//printf("%ld %ld %ld vR_map: %lg | vR_flow: %lg\n",ii,i,jj,vR_map[i]/area_vor[i],vR_flow[i]);
+		}
+	}
+	
+
+}
+
 
 extern double **vR_maps;
 extern double *h_vR_external;

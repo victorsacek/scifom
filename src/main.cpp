@@ -107,6 +107,7 @@ void orog();
 
 void vR_sort();
 void vR_calc();
+void vR_calc_orography();
 void calc_vR_external();
 void read_vR_external();
 
@@ -185,6 +186,7 @@ int main()
 	printf("aloca topo_din ok\n");
     aloca_uplift();
 	printf("aloca uplift ok\n");
+	read_vR_external();
 	vR_sort();
 
 
@@ -235,7 +237,6 @@ int main()
 
 	vR_calc();
 
-	read_vR_external();
 	if (vR_external_flag==1) calc_vR_external();
 	gettimeofday(&start, NULL);
 
@@ -259,6 +260,7 @@ int main()
         //monta_falha();
 
 		if (long(tempo)%20000==0){
+			if (vR_external_flag==-1) vR_calc_orography();
 			if (vR_external_flag==0) vR_calc();
 			if (vR_external_flag==1) calc_vR_external();
 		}
