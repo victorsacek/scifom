@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-extern double *uplift_map;
+extern double **uplift_map;
 
 extern long *vR_ordem;
 extern double *vR_aux;
@@ -72,7 +72,7 @@ void vR_calc()
     double vR_efetivo;
     double vR_efetivoandes;
 	for (i=0;i<nodes;i++){
-		if (uplift_map[i]==0){
+		if (uplift_map[i][0]==0){
             		if (time_ofchangevR!=0){
                 		if (tempo<=time_ofchangevR){
                     			vR_map[i]=vR*area_vor[i]; //// vR_map = 1 * Area // vR constante
@@ -161,7 +161,7 @@ void vR_calc_orography()
 
 			//if (h_topo[i]>500 && xy[i][0]<xxn)
 			if (xy[i][0]<xxn){
-				if (h_topo[i]>500 && uplift_map[i]>0)
+				if (h_topo[i]>500 && uplift_map[i][0]>0)
 					vR_map[i]=vR_flow[i]*(h_topo[i]-450.)*area_vor[i]/(l_oro*h_oro);
 				else
 					vR_map[i]=vR_flow[i]*(50.)*area_vor[i]/(l_oro*h_oro);
@@ -193,7 +193,7 @@ void calc_vR_external()
 	long cont_h_mean=0;
 	double fac;
 	for (i=0;i<nodes;i++){
-		if (uplift_map[i]>600.0 && xy[i][1]<500.0E3){
+		if (uplift_map[i][0]>600.0 && xy[i][1]<500.0E3){
 			//if (h_max<h_topo[i]) h_max=h_topo[i];
 			h_mean+=h_topo[i];
 			cont_h_mean+=1;
