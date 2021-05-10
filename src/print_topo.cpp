@@ -76,7 +76,7 @@ void print_topo(double tempo,long muda_ponto)
 
 	char nome[30];
 
-	if (long(tempo)%200000==0){
+	if (long(tempo)%100000==0){
 
 		FILE *Ftopo;
 

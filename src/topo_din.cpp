@@ -72,3 +72,45 @@ void topo_din()
         }
 	}
 }
+
+
+extern double *tempo_sea;
+extern double *h_sea;
+extern long n_sea_levels;
+
+void sea_level_change()
+{
+    long t=0;
+    double dh;
+    double sea1=0.0,sea2=0.0,aux;
+
+    for (t=0;t<n_sea_levels-1;t++){
+        if (tempo-dt>tempo_sea[t] && tempo-dt<=tempo_sea[t+1]){
+            aux = (tempo-dt-tempo_sea[t])/(tempo_sea[t+1]-tempo_sea[t]);
+            sea1 = h_sea[t]*(1.0-aux) + h_sea[t+1]*aux;
+        }
+        if (tempo>tempo_sea[t] && tempo<=tempo_sea[t+1]){
+            aux = (tempo-tempo_sea[t])/(tempo_sea[t+1]-tempo_sea[t]);
+            sea2 = h_sea[t]*(1.0-aux) + h_sea[t+1]*aux;
+        }
+    }
+    dh = sea1-sea2;
+    printf("sea1=%lf sea2=%lf dh=%lf\n",sea1,sea2,dh);
+
+    for (long i=0;i<nodes;i++){
+        h_topo[i]+=dh;
+        h_bed[i]+=dh;
+		h_crust_sup[i]+=dh;
+		moho[i]+=dh;
+        h_flex_cumulat[i]+=dh;
+        h_topo_din_cumulat[i]+=dh;
+		//h_q[i]+=-dh*RHOC; deve-se colocar a carga h[q]?
+        //if (int(tempo)%100000==0){printf("u=%lf\n", uplift_scale);}
+        if (lith_flag==1){
+            for (int l=0;l<nsr;l++){
+                h_sr[i][l]+=dh;
+            }
+        }
+	}
+
+}

@@ -38,6 +38,11 @@ double *h_topo_din_cumulat;
 double *hu_flex_cumulat;
 double *water;
 
+
+double *tempo_sea;
+double *h_sea;
+long n_sea_levels;
+
 double *h_topo_prov;
 // variaveis adicionadas para uplift variavel
 

@@ -110,6 +110,9 @@ void vR_calc();
 void vR_calc_orography();
 void calc_vR_external();
 void read_vR_external();
+void read_sea_level();
+
+void sea_level_change();
 
 int main()
 {
@@ -187,6 +190,7 @@ int main()
     aloca_uplift();
 	printf("aloca uplift ok\n");
 	read_vR_external();
+	read_sea_level();
 	vR_sort();
 
 
@@ -240,7 +244,7 @@ int main()
 	if (vR_external_flag==1) calc_vR_external();
 	gettimeofday(&start, NULL);
 
-    for (tempo=dt;tempo<tempo_max;tempo+=dt){
+    for (tempo=dt;tempo<=tempo_max;tempo+=dt){
 
 		if (cont_falha<num_falha){
 			//if (tempo-pos_falha_vec[cont_falha][2]<=0.4E6) Te_uc_on=1;
@@ -264,6 +268,8 @@ int main()
 			if (vR_external_flag==0) vR_calc();
 			if (vR_external_flag==1) calc_vR_external();
 		}
+
+		if (n_sea_levels>0) sea_level_change();
 
 
         if (long(tempo)%(2000)==0){

@@ -212,3 +212,32 @@ void read_vR_external()
 		printf("\n\nExternal vR off\n\n");
 	}
 }
+
+extern double *tempo_sea;
+extern double *h_sea;
+extern long n_sea_levels;
+
+void read_sea_level()
+{
+	FILE *f;
+	n_sea_levels=0;
+	f = fopen("sea_level_external.txt","r");
+	if (f!=NULL){
+		
+		fscanf(f,"%ld",&n_sea_levels);
+		if (n_sea_levels>0){
+			printf("\n\nExternal sea level on\n\n");
+			h_sea = Aloc_vector_real(n_sea_levels);
+			tempo_sea = Aloc_vector_real(n_sea_levels);
+			
+			for (int t=0;t<n_sea_levels;t++){
+				fscanf(f,"%lf %lf",&tempo_sea[t],&h_sea[t]);
+				//printf("%lf\n",h_vR_external[t]);
+			}
+		}
+		fclose(f);
+	}
+	else {
+		printf("\n\nExternal sea level off\n\n");
+	}
+}
