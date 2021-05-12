@@ -409,7 +409,7 @@ void fluvi_min()
 		lsr_map[i]*=ls;
 		Qr_prov[i]*=Kf/dist_fluvi[i];
 	}
-	
+	double hi,hj;
 	
 	for (cont=0;cont<n_sub_dt;cont++){
 		
@@ -420,22 +420,24 @@ void fluvi_min()
 		
 		for (cont_stack=0;cont_stack<nodes;cont_stack++){
 			i=stack_fluvi[cont_stack];
-			j=direc_fluvi[i];                   
+			j=direc_fluvi[i];
 			
 			if (j!=i){
-				if (h_topo_prov[i]>h_topo_prov[j]){      
-					if (h_topo_prov[j]>nivel){
-						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
-						Qeqb = Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j]);
+				hi=h_topo_prov[i];
+				hj=h_topo_prov[j];
+				if (hi>hj){      
+					if (hj>nivel){
+						//Qeqb = Kf*Qr_prov[i]*(hi-hj)/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(hi-hj);
 					}
 					else{
-						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-nivel)/dist_fluvi[i];
-						Qeqb = Qr_prov[i]*(h_topo_prov[i]-nivel);
+						//Qeqb = Kf*Qr_prov[i]*(hi-nivel)/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(hi-nivel);
 					}
 					
-					if (h_topo_prov[i]<nivel){
-						//Qeqb = Kf*Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j])/dist_fluvi[i];
-						Qeqb = Qr_prov[i]*(h_topo_prov[i]-h_topo_prov[j]);
+					if (hi<nivel){
+						//Qeqb = Kf*Qr_prov[i]*(hi-hj)/dist_fluvi[i];
+						Qeqb = Qr_prov[i]*(hi-hj);
 					}
 						
 						
@@ -444,15 +446,15 @@ void fluvi_min()
 						Qf[j]+=Qeqb;
 					}
 					else {
-						if (h_bed[i]<h_topo_prov[i])
+						if (h_bed[i]<hi)
 							lb=lsr_map[i];
 						else
 							lb=Lf_vec[i];
-						//if (h_topo_prov[i]>4500.0)
+						//if (hi>4500.0)
 						//	lb = 10000.0;
 						Df[i]=((Qf[i]-Qeqb)/area_vor[i])*(dist_fluvi[i]/lb);
 						Qf[j]+=Qf[i]+(Qeqb-Qf[i])*(dist_fluvi[i]/lb);
-					}        
+					}               
 				}    
 				else {
 					Df[i]=Qf[i]/area_vor[i]; 
