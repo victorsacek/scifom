@@ -252,6 +252,7 @@ int main()
 			else Te_uc_on=0;
 		}
 
+		if (n_sea_levels>0) sea_level_change();
 
         difusao();    //printf("d");
         fluvi_min();  //printf("f");
@@ -269,7 +270,7 @@ int main()
 			if (vR_external_flag==1) calc_vR_external();
 		}
 
-		if (n_sea_levels>0) sea_level_change();
+		
 
 
         if (long(tempo)%(2000)==0){
