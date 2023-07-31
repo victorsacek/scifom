@@ -373,7 +373,7 @@ long ntri_lat;
 
 long **tri_lat;
 
-
+int ext_mesh;
 
 
 

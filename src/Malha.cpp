@@ -18,6 +18,7 @@ double det (double p1, double p2, double p3, double p4);
 void malha_regular(double minx,double maxx,double miny,double maxy,long Nx, long Ny);
 
 long gera_malha(long n, double **xy, long **Tri);
+long importa_malha(long **Tri);
 
 void thermal_aloca();
 void thermal_modiftopo();
@@ -75,6 +76,8 @@ extern long *cond_topo_modif;
 extern long *in_tri; // Numero do triangulo para o respectivo ponto novo
 
 extern double tempo;
+
+extern int ext_mesh;
 
 void malha()
 {
@@ -160,7 +163,12 @@ void malha()
 	
     printf("%ld %ld\n",i,nodes);
     
-    tri = gera_malha(n, xy, Tri);
+    if (ext_mesh==0) {
+        tri = gera_malha(n, xy, Tri);
+    }
+    else {
+        tri = importa_malha(Tri);
+    }
        
     long aux1;    
     double xi,xj,xk,yi,yj,yk,delta;

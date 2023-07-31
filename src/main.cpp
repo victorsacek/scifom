@@ -8,6 +8,7 @@
 ////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <math.h>
 #include "header.h"
@@ -114,8 +115,20 @@ void read_sea_level();
 
 void sea_level_change();
 
-int main()
+extern int ext_mesh;
+
+int main(int argc, char *argv[])
 {
+	if (argc>1){
+		if (strcmp(argv[1],"ext_mesh")==0){
+			ext_mesh=1;
+		}
+		else {
+			printf("Parameter error: %s\n",argv[1]);
+			exit(-1);
+		}
+	}
+
 
     long i,j;
     double soma_h;
