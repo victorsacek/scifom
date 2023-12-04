@@ -105,10 +105,13 @@ void malha()
     area_tri = (maxx-minx)*(maxy-miny)/tri;
     //aresta = sqrt(4*1.73*area_tri/3);
     aresta = (maxy-miny)/(n_lat-1);
+
+    printf("\nmaxx before: %f\n",maxx);
 	
 	minx = 100000.0;
-	maxx = aresta*(n_latx-1)+minx;
-    
+	maxx = minx;//aresta*(n_latx-1)+minx;
+    printf("\nmaxx after: %f\n",maxx);
+
     Edge = aresta;
     
     long verif;
@@ -140,12 +143,17 @@ void malha()
 	FILE *f_pontos;
 	
 	f_pontos = fopen("pontos.txt","r");
+
+    minx = 1.0E24;
+    maxx = -1.0E24;
 	
 	for (i=0;i<n;i++){
 		fscanf(f_pontos, "%lf %lf",&xy[i][0],&xy[i][1]);
 		if (xy[i][0]!=minx){///////////// em i=0, topo nao muda
 		cond_topo_modif[i]=1; 
 		}
+        if (xy[i][0]<minx) minx = xy[i][0];
+        if (xy[i][0]>maxx) maxx = xy[i][0];
 	}
 	
 	fclose(f_pontos);
@@ -248,6 +256,8 @@ void malha()
     fclose(f_conec);
     
     double x1,x2,y1,y2,minba,maxba;
+
+    printf("\nLimits: %f %f %f %f\n",minx,maxx,miny,maxy);
     
     for (i=0;i<n;i++){
         x1=xy[i][0]; y1=xy[i][1];

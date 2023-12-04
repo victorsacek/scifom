@@ -194,11 +194,11 @@ int main(int argc, char *argv[])
 
 
     malha();
-    aloca_topo();
-    aloca_falhas();
-    aloca_difusao();
-    aloca_fluvi();
-	aloca_topo_din();
+    aloca_topo(); printf("\nAloca_topo: done\n");
+    aloca_falhas(); printf("\nAloca_falhas: done\n");
+    aloca_difusao(); printf("\nAloca_difusao: done\n");
+    aloca_fluvi(); printf("\nAloca_fluvi: done\n");
+	aloca_topo_din(); 
 	printf("aloca topo_din ok\n");
     aloca_uplift();
 	printf("aloca uplift ok\n");
